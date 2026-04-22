@@ -45,7 +45,7 @@ const SignUp = () => {
                     placeholder="Zakkiy"
                     register={register}
                     error={errors.fullName}
-                    validation={{required: 'Nama lengkap harus diisi', minLength: 2}}
+                    validation={{required: 'Nama lengkap harus diisi', minLength: { value: 2, message: 'Nama lengkap minimal 2 karakter' }}}
                 />
                 <InputField
                     name="email"
@@ -53,7 +53,7 @@ const SignUp = () => {
                     placeholder="zakkiycod@gmail.com"
                     register={register}
                     error={errors.email}
-                    validation={{required: 'Email harus diisi', pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: 'Email tidak valid'}}
+                    validation={{required: 'Email harus diisi', pattern: { value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, message: 'Email tidak valid' }}}
                 />
                 <InputField
                     name="password"
@@ -62,7 +62,7 @@ const SignUp = () => {
                     placeholder="Masukkan password"
                     register={register}
                     error={errors.password}
-                    validation={{required: 'Password harus diisi', minLength: 8, message: 'Password harus memiliki minimal 8 karakter'}}
+                    validation={{required: 'Password harus diisi', minLength: { value: 8, message: 'Password harus memiliki minimal 8 karakter' }}}
                 />
                 <CountrySelectField
                     name="country"

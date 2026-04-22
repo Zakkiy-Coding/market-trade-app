@@ -6,13 +6,17 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "inngest:dev": "npx inngest-cli@latest dev -u http://localhost:3000/api/inngest"
   },
   "dependencies": {
+    "@better-auth/infra": "^0.2.5",
     "@types/react-select-country-list": "^2.2.3",
+    "better-auth": "^1.6.6",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "cmdk": "^1.1.1",
+    "inngest": "^4.2.4",
     "lucide-react": "^1.8.0",
     "mongodb": "^7.2.0",
     "mongoose": "^9.5.0",

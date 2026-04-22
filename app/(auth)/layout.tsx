@@ -22,7 +22,7 @@ const Layout = ({children}:{children: React.ReactNode}) => {
                         </div>
                         <div className="flex items-center gap-0.5">
                             {[1, 2, 3, 4, 5].map((star) => (
-                                <Image src="assets/icons/star.svg" alt="Star Rating" className="w-5 h-5" key={star} width={20} height={20}  />
+                                <Image src="/assets/icons/star.svg" alt="Star Rating" className="w-5 h-5" key={star} width={20} height={20}  />
                             ))}
                         </div>
                     </div>

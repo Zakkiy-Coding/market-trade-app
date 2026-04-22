@@ -22,7 +22,7 @@ export default function Home() {
                   height={600}
                 />
             </div>
-            <div className="md-col-span xl:col-span-2">
+            <div className="md:col-span xl:col-span-2">
                 <TradingViewWidget
                     title="Stock Heat Map"
                     scriptUrl={scriptUrl + "stock-heatmap.js"}
@@ -33,14 +33,14 @@ export default function Home() {
             </div>
         </section>
           <section className="grid w-full gap-8 home-section">
-            <div className="h-full md-col-span-1 xl:col-span-1">
+            <div className="h-full md:col-span-1 xl:col-span-1">
                 <TradingViewWidget
                   scriptUrl={scriptUrl + "timeline.js"}
                   config={TOP_STORIES_WIDGET_CONFIG}
                   height={600}
                 />
             </div>
-            <div className="h-full md-col-span-1 xl:col-span-2">
+            <div className="h-full md:col-span-1 xl:col-span-2">
                 <TradingViewWidget
                     scriptUrl={scriptUrl + "market-quotes.js"}
                     config={MARKET_DATA_WIDGET_CONFIG}

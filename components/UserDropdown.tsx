@@ -13,14 +13,19 @@ import {useRouter} from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {LogOut} from "lucide-react";
 import Navitems from "@/components/Navitems";
+import {authClient} from "@/lib/better-auth/auth-client";
 
 const UserDropdown = () => {
     const router = useRouter()
+    const { data: session } = authClient.useSession();
+    const user = session?.user;
 
     const handleLogout = async () => {
+        await authClient.signOut();
         router.push('/sign-in')
     }
-    const user = {name: 'Zakkiy', email: 'muhammadzakkiy38@gmail.com'};
+
+    if (!user) return null;
 
     return (
         <DropdownMenu>

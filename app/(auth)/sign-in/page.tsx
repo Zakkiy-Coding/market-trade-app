@@ -1,16 +1,16 @@
-'use client'
-import React, {useState} from 'react'
-import {useForm} from "react-hook-form";
-import {Button} from "@/components/ui/button";
-import InputField from "@/components/forms/InputField";
-import FooterLink from "@/components/forms/FooterLink";
+'use client';
+
+import { useForm } from 'react-hook-form';
+import { Button } from '@/components/ui/button';
+import InputField from '@/components/forms/InputField';
+import FooterLink from '@/components/forms/FooterLink';
+import {signInWithEmail, signUpWithEmail} from "@/lib/actions/auth.actions";
+import {toast} from "sonner";
+import {signInEmail} from "better-auth/api";
 import {useRouter} from "next/navigation";
-import {authClient} from "@/lib/better-auth/auth-client";
-import logger from "@/lib/logger";
 
 const SignIn = () => {
-    const router = useRouter();
-    const [error, setError] = useState<string | null>(null);
+    const router = useRouter()
     const {
         register,
         handleSubmit,
@@ -20,79 +20,52 @@ const SignIn = () => {
             email: '',
             password: '',
         },
-        mode: 'onBlur'
-    })
+        mode: 'onBlur',
+    });
+
     const onSubmit = async (data: SignInFormData) => {
-        setError(null);
         try {
-            const { error: authError } = await authClient.signIn.email({
-                email: data.email,
-                password: data.password,
-            });
-
-            if (authError) {
-                logger.error('Authentication failed', { 
-                    email: data.email, 
-                    message: authError.message 
-                });
-                setError(authError.message || 'Authentication failed');
-                return;
-            }
-
-            logger.info('User signed in successfully', { email: data.email });
-            router.push('/');
-            router.refresh();
-        }
-        catch (err) {
-            const errorInstance = err instanceof Error ? err : new Error(String(err));
-            logger.error('Unexpected error during sign-in', {
-                email: data.email,
-                message: errorInstance.message,
-                stack: errorInstance.stack
-            });
-            setError('An unexpected error occurred. Please try again.');
+            const result = await signInWithEmail(data);
+            if(result.success) router.push('/');
+        } catch (e) {
+            console.error(e);
+            toast.error('Sign in failed', {
+                description: e instanceof Error ? e.message : 'Failed to sign in.'
+            })
         }
     }
+
     return (
         <>
-            <h1 className="form-title">Sign In</h1>
-
-            {error && (
-                <div className="bg-red-500/10 border border-red-500 text-red-500 p-3 rounded-md text-sm mb-4">
-                    {error}
-                </div>
-            )}
+            <h1 className="form-title">Welcome back</h1>
 
             <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
                 <InputField
                     name="email"
                     label="Email"
-                    placeholder="name@example.com"
+                    placeholder="contact@jsmastery.com"
                     register={register}
                     error={errors.email}
-                    validation={{
-                        required: 'Email harus diisi',
-                        pattern: {
-                            value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-                            message: 'Email tidak valid'
-                        }
-                    }}
+                    validation={{ required: 'Email is required', pattern: /^\w+@\w+\.\w+$/ }}
                 />
+
                 <InputField
                     name="password"
                     label="Password"
+                    placeholder="Enter your password"
                     type="password"
-                    placeholder="Masukkan password"
                     register={register}
                     error={errors.password}
-                    validation={{required: 'Password harus diisi', minLength: { value: 8, message: 'Password harus memiliki minimal 8 karakter' }}}
+                    validation={{ required: 'Password is required', minLength: 8 }}
                 />
-                <FooterLink text="Belum punya akun?" linkText="Sign up" href="/sign-up" />
+
                 <Button type="submit" disabled={isSubmitting} className="yellow-btn w-full mt-5">
-                    { isSubmitting ? 'Signing In...' : 'Sign In'}
+                    {isSubmitting ? 'Signing In' : 'Sign In'}
                 </Button>
+
+                <FooterLink text="Don't have an account?" linkText="Create an account" href="/sign-up" />
             </form>
         </>
-    )
-}
-export default SignIn
+    );
+};
+export default SignIn;

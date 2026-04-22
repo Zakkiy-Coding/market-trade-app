@@ -1,23 +1,22 @@
 import { betterAuth } from "better-auth";
-import { mongodbAdapter } from "better-auth/adapters/mongodb"
+import { mongodbAdapter} from "better-auth/adapters/mongodb";
 import { connectToDatabase} from "@/database/mongoose";
-import {nextCookies} from "better-auth/next-js";
+import { nextCookies} from "better-auth/next-js";
 
 let authInstance: ReturnType<typeof betterAuth> | null = null;
+
 export const getAuth = async () => {
     if(authInstance) return authInstance;
-    const mongoose = await connectToDatabase()
-    const db = mongoose.connection.db;
-    if(!db) throw new Error("Database not connected");
 
-    if (!process.env.BETTER_AUTH_SECRET || !process.env.BETTER_AUTH_BASE_URL) {
-        throw new Error("BETTER_AUTH_SECRET and BETTER_AUTH_BASE_URL are required environment variables");
-    }
+    const mongoose = await connectToDatabase();
+    const db = mongoose.connection.db;
+
+    if(!db) throw new Error('MongoDB connection not found');
 
     authInstance = betterAuth({
         database: mongodbAdapter(db as any),
         secret: process.env.BETTER_AUTH_SECRET,
-        baseURL: process.env.BETTER_AUTH_BASE_URL,
+        baseURL: process.env.BETTER_AUTH_URL,
         emailAndPassword: {
             enabled: true,
             disableSignUp: false,
@@ -26,8 +25,10 @@ export const getAuth = async () => {
             maxPasswordLength: 128,
             autoSignIn: true,
         },
-        plugins: [nextCookies()]
-    })
-    return authInstance;
-};
+        plugins: [nextCookies()],
+    });
 
+    return authInstance;
+}
+
+export const auth = await getAuth();
